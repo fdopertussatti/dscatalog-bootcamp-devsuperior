@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.pertusoftware.dscatalog.services.exceptions.EntityNotFoundException;
 
+
 @ControllerAdvice
 public class ResourceExceptionHandler {
 
@@ -25,5 +26,7 @@ public class ResourceExceptionHandler {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
 
 	}
+
+
 
 }
