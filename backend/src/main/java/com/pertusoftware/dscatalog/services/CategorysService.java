@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.pertusoftware.dscatalog.dto.CategoryDTO;
 import com.pertusoftware.dscatalog.entities.Category;
 import com.pertusoftware.dscatalog.repositories.CategoryRepository;
-import com.pertusoftware.dscatalog.services.exceptions.EntityNotFoundException;
+import com.pertusoftware.dscatalog.services.exceptions.ResourceNotFoundException;
 
 /*registra a classe como um componente que participa do sistema de injeção de dependência do Spring*/
 @Service
@@ -37,7 +39,7 @@ public class CategorysService {
 	@Transactional(readOnly = true)
 	public CategoryDTO findById(Long id) {
 		Optional<Category> obj = reposotory.findById(id);
-		Category entity = obj.orElseThrow(() -> new EntityNotFoundException("Entity not found"));
+		Category entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
 		return new CategoryDTO(entity);
 	}
 
@@ -47,5 +49,19 @@ public class CategorysService {
 		entity.setName(dto.getName());
 		entity = reposotory.save(entity);
 		return new CategoryDTO(entity);
+	}
+
+	@Transactional
+	public CategoryDTO update(Long id, CategoryDTO dto) {
+		try {
+		Category entity = reposotory.getOne(id) ;
+		entity.setName(dto.getName());
+		entity = reposotory.save(entity);		
+		return new CategoryDTO(entity);
+		}
+		catch (EntityNotFoundException e){
+			throw new ResourceNotFoundException("Id not found" + id);
+		}
+
 	}
 }
