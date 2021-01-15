@@ -6,13 +6,17 @@ import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.hibernate.loader.plan.exec.process.internal.AbstractRowReader;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.pertusoftware.dscatalog.dto.CategoryDTO;
 import com.pertusoftware.dscatalog.entities.Category;
 import com.pertusoftware.dscatalog.repositories.CategoryRepository;
+import com.pertusoftware.dscatalog.services.exceptions.DatabaseException;
 import com.pertusoftware.dscatalog.services.exceptions.ResourceNotFoundException;
 
 /*registra a classe como um componente que participa do sistema de injeção de dependência do Spring*/
@@ -63,5 +67,19 @@ public class CategorysService {
 			throw new ResourceNotFoundException("Id not found" + id);
 		}
 
+	}
+
+	
+	public void delete(Long id) {
+		try {
+			reposotory.deleteById(id);
+		}
+		catch (EmptyResultDataAccessException e) {
+			throw new ResourceNotFoundException("Id not found " + id);
+		}
+		catch (DataIntegrityViolationException e) {
+			throw new DatabaseException("Integrity violation");
+		}
+		
 	}
 }
