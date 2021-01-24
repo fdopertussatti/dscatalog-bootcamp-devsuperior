@@ -21,7 +21,11 @@
         color: rgba(255, 255, 255, 0.5);
 
         &.active{
-            font-style: bold;
+            font-weight: bold;
+            color: #FFF;
+        }
+        &:hover{
+            color: #FFF;
         }
     }
 }
