@@ -23,14 +23,14 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.pertusoftware.dscatalog.dto.UserDTO;
 import com.pertusoftware.dscatalog.dto.UserInsertDTO;
 import com.pertusoftware.dscatalog.dto.UserUpdateDTO;
-import com.pertusoftware.dscatalog.services.UsersService;
+import com.pertusoftware.dscatalog.services.UserService;
 
 @RestController
 @RequestMapping(value = "/users")
 public class UserResource {
 
 	@Autowired
-	private UsersService service;
+	private UserService service;
 
 	// Lista todos os objetos
 	@GetMapping
