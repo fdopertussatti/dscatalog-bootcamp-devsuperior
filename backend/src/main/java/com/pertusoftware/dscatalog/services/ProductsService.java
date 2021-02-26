@@ -1,5 +1,7 @@
 package com.pertusoftware.dscatalog.services;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
@@ -30,8 +32,9 @@ public class ProductsService {
 	private CategoryRepository categoryRepository;
 
 	@Transactional(readOnly = true)
-	public Page<ProductDTO> findAllPaged(PageRequest pageRequest) {
-		Page<Product> list = reposotory.findAll(pageRequest);
+	public Page<ProductDTO> findAllPaged(Long categoryId, String name, PageRequest pageRequest) {
+		List<Category> categories = (categoryId==0) ? null: Arrays.asList(categoryRepository.getOne(categoryId));
+		Page<Product> list = reposotory.find(categories, name, pageRequest);
 
 		// Expressão lambda
 		return list.map(x -> new ProductDTO(x));
